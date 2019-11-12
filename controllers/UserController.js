@@ -12,13 +12,13 @@ class UserController {
 
             let values = this.getValues();
             this.getPhoto().then(
-                (content)=>{
+                content => {
 
                     values.photo = content;
                     this.addLine(values) 
 
                 }, 
-                (e)=>{
+                e => {
 
                     console.error(e)
 
@@ -28,7 +28,7 @@ class UserController {
 
     }
 
-    getPhoto(){
+    getPhoto(){       
 
         return new Promise((resolve, reject)=>{
         
@@ -56,7 +56,7 @@ class UserController {
             if(file){
                 fileReader.readAsDataURL(file);
             }else{
-                resolve('dist/img/boxed-bg.jpg')
+                resolve("dist/img/boxed-bg.jpg")
             }
 
             
@@ -67,9 +67,18 @@ class UserController {
     }
 
     getValues(){
-        let user = {};
+        let user = {}; 
+        let isValid = true;
 
         [...this.formEl.elements].forEach(function(field, index){
+
+            if(["name", "email", "password"].indexOf(field.name) > -1 && !field.value){
+
+                //console.dir(field.parentElement.classList.add("has-error"));
+                field.parentElement.classList.add("has-error")
+                isValid = false;
+            }
+
             if(field.name == "gender"){
                 if(field.checked)
                 user[field.name] = field.value;
@@ -82,8 +91,13 @@ class UserController {
             
              // console.log(field.id, field.name, field.value, field.checked, index)
          })
-           
-            var objectUser = new User(
+         
+         if(!isValid){
+            return false;
+         }
+         
+         //console.log(user)
+            return new User(
                 user.name, 
                 user.gender, 
                 user.birth, 
@@ -92,9 +106,9 @@ class UserController {
                 user.password, 
                 user.photo, 
                 user.admin
-                );
-                return objectUser;
+                );                
     }
+    
     addLine(dataUser){
 
         let tr = document.createElement("tr");
