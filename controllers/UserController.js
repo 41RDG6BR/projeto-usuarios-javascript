@@ -74,7 +74,7 @@ class UserController {
         //let _this = this
         this.formEl.addEventListener("submit", event=>{
             event.preventDefault();
-            
+
             let btn = this.formUpdateEl.querySelector("[type=submit");
 
             let values = this.getValues(this.formEl);
@@ -190,6 +190,12 @@ class UserController {
     } 
 
     addEventsTr(tr) {
+        tr.querySelector(".btn-danger").addEventListener("click", e => {
+            if(confirm("Deseja realmente excluir?")) {
+                tr.remove()
+            }
+        })
+
         tr.querySelector(".btn-edit").addEventListener("click", e => {
             let json = JSON.parse(tr.dataset.user)
 
